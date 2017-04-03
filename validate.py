@@ -57,7 +57,7 @@ def setup():
 	creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
 	setup.client = gspread.authorize(creds)
 
-
+#Validate the addresses.
 def validateaddresses(sheetname):
 	# Create an empty list.
 	output = []
@@ -100,10 +100,12 @@ def validateaddresses(sheetname):
 			# print(postcode)
 			# Query the API.
 			response = requests.get(
-				"https://api.getaddress.io/v2/uk/%(postcode)s/%(number)s?api-key=%(apikey)s" % {"postcode": (postcode),
-																								"number": (number),
-																								"apikey": (
-																								setup.apikey)})
+				"https://api.getaddress.io/v2/uk/%(postcode)s/%(number)s?api-key=%(apikey)s" % {
+														"postcode": (postcode),
+														"number": (number),
+														"apikey": (setup.apikey)
+														}
+			)
 			# Retrieve and format the data.
 			try:
 				data = (json.loads(response.text)['Addresses'][0].replace(", ", "\n"))
@@ -118,7 +120,7 @@ def validateaddresses(sheetname):
 	# Return the list of data.
 	return (output)
 
-
+#Upload output to sheet.
 def uploadoutput(sheetname, output):
 	print('Opeining sheet "%(sheet)s"' % {"sheet": (sheetname)})
 	# Find the sheet by name.
